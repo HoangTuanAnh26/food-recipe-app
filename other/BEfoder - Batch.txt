@@ -1,0 +1,56 @@
+backend/
+├── app/
+│   ├── Console/
+│   │   └── Commands/
+│   │       └── CloneMealDataCommand.php     ← `php artisan meals:seed`, gọi MealDbService để clone data từ TheMealDB
+│   │
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   └── Api/
+│   │   │       ├── AuthController.php        ← register / login / logout
+│   │   │       ├── CategoryController.php     ← GET /api/categories
+│   │   │       ├── RecipeController.php       ← GET /api/recipes, /api/recipes/{id}, /api/recipes/random
+│   │   │       ├── FavoriteController.php     ← GET/POST/DELETE /api/favorites
+│   │   │       └── SearchController.php       ← GET /api/search
+│   │   │
+│   │   ├── Requests/
+│   │   │   ├── Auth/
+│   │   │   │   ├── RegisterRequest.php
+│   │   │   │   └── LoginRequest.php
+│   │   │   └── Favorite/
+│   │   │       └── StoreFavoriteRequest.php
+│   │   │
+│   │   └── Resources/                         ← format JSON trả về FE (tránh lộ field thừa, chuẩn hoá response)
+│   │       ├── RecipeResource.php
+│   │       ├── CategoryResource.php
+│   │       └── FavoriteResource.php
+│   │
+│   ├── Models/
+│   │   ├── User.php
+│   │   ├── Category.php
+│   │   ├── Recipe.php          ← $primaryKey = 'id_meal', $keyType = 'string'
+│   │   └── Favorite.php
+│   │
+│   └── Services/                              ← tách business logic khỏi Controller
+│       ├── AuthService.php
+│       ├── FavoriteService.php
+│       └── MealDbService.php                  ← gọi TheMealDB API (getAllCategories, getMealsByCategory, getMealDetail)
+│
+├── database/
+│   ├── migrations/
+│   │   ├── ..._create_categories_table.php
+│   │   ├── ..._create_recipes_table.php        ← ingredients_json (json), area, tags, youtube...
+│   │   ├── ..._create_meal_categories_table.php ← pivot recipes ↔ categories
+│   │   └── ..._create_favorites_table.php       ← user_id FK, meal_id FK (string)
+│   └── seeders/
+│       └── DatabaseSeeder.php
+│
+├── routes/
+│   └── api.php                                 ← toàn bộ route nghiệp vụ nằm đây, web.php giữ nguyên mặc định
+│
+└── tests/
+    └── Feature/
+        ├── AuthTest.php
+        ├── FavoriteTest.php
+        ├── RecipeTest.php
+        └── SearchTest.php
